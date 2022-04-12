@@ -7,9 +7,9 @@ let dynamo = new AWS.DynamoDB({
 
 exports.emailService = async (event) => {
 
-    // console.log(event);
-    const sns = event.Records[0].Sns;
-    // console.log(sns);
+     console.log(event);
+     const sns = event.Records[0].Sns;
+     console.log(sns);
 
     const message = JSON.parse(sns.Message);
 
