@@ -1,7 +1,5 @@
 const AWS = require('aws-sdk')
 
-require('dotenv').config();
-
 let ses = new AWS.SES();
 
 exports.emailService = async (event) => {
