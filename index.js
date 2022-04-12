@@ -13,12 +13,14 @@ exports.emailService = async (event) => {
     const to = message.username;
     const token = message.token;
 
-    // console.log(to);
-    // console.log(token);
+     console.log("to",to);
+     console.log("token",token);
+     console.log("sourceArn", `arn:aws:ses:${process.env.REGION}:${process.env.ACCOUNT_ID}:identity/${process.env.ENV_TYPE}.jasonpauldj.me`);
+     console.log("source", `notification@${process.env.ENV_TYPE}.jasonpauldj.me`);
 
     const inputParams = {
-        SourceArn: "arn:aws:ses:us-east-1:502560949037:identity/dev.jasonpauldj.me",
-        Source:`notification@${process.ENV_TYPE}.jasonpauldj.me`,
+        SourceArn: `arn:aws:ses:${process.env.REGION}:${process.env.ACCOUNT_ID}:identity/${process.env.ENV_TYPE}.jasonpauldj.me`,
+        Source:`notification@${process.env.ENV_TYPE}.jasonpauldj.me`,
         Destination: {
             ToAddresses: [to]
         },
