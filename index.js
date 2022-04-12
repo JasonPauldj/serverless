@@ -31,7 +31,7 @@ exports.emailService = async (event) => {
     // checking if mail has already been sent
     try {
         let data = await dynamo.query(dynamoDBInputParams).promise();
-        if(data.Count==0){
+        if(data.Count > 0){
             console.log("user already exists", data);
             return;
         }
