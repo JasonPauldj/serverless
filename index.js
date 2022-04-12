@@ -1,7 +1,7 @@
 const AWS = require('aws-sdk')
 var ses = new AWS.SES();
 
-exports.handler = async (event) => {
+exports.emailService = async (event) => {
  
     // console.log(event);
     const sns = event.Records[0].Sns;
