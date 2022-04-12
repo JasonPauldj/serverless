@@ -42,12 +42,15 @@ exports.emailService = async (event) => {
         }
     }
 
-    let promise=ses.sendEmail(inputParams).promise();
-    promise.then((data)=>{
-        console.log(data);
-    }).catch(err=>{
-        console.log(err);
-    })
+    // let promise=ses.sendEmail(inputParams).promise();
+    // promise.then((data)=>{
+    //     console.log(data);
+    // }).catch(err=>{
+    //     console.log(err);
+    // })
+    // console.log("promise", promise);
+
+    return ses.sendEmail(inputParams).promise();
 
     // ses.sendEmail(inputParams, function(err, data) {
     //     if (err) console.log(err, err.stack); // an error occurred
