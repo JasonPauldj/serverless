@@ -7,14 +7,17 @@ let dynamo = new AWS.DynamoDB({
 
 exports.emailService = async (event) => {
 
-     console.log(event);
-     const sns = event.Records[0].Sns;
-     console.log(sns);
+    console.log(event);
+    const sns = event.Records[0].Sns;
+    console.log(sns);
 
     const message = JSON.parse(sns.Message);
 
     const to = message.username;
     const token = message.token;
+
+    console.log("to", to);
+    console.log("token", token);
 
     const dynamoDBInputParams = {
         KeyConditionExpression: "userId = :v1",
@@ -26,13 +29,21 @@ exports.emailService = async (event) => {
         TableName: process.env.DYNAMODB_TABLE_NAME
     }
     // checking if mail has already been sent
-    dynamo.query(dynamoDBInputParams, function (err, data) {
-        if (err) console.log(err, err.stack);
-        else {
+    try {
+        let data = await dynamo.query(dynamoDBInputParams).promise();
+        console.log("user already exists", data);
+        return;
+    } catch (err) {
+        console.log("there was an err",err);
+    }
 
-            return;
-        }
-    })
+    // dynamo.query(dynamoDBInputParams, function (err, data) {
+    //     if (err) console.log(err, err.stack);
+    //     else {
+    //         console.log("mail has already been sent to this user");
+    //         return;
+    //     }
+    // })
 
     //if mail hasn't been sent
     //put item in dynamodb
@@ -51,8 +62,6 @@ exports.emailService = async (event) => {
     }
 
     //sending email to the user
-    console.log("to", to);
-    console.log("token", token);
     console.log("sourceArn", `arn:aws:ses:${process.env.REGION}:${process.env.ACCOUNT_ID}:identity/${process.env.ENV_TYPE}.jasonpauldj.me`);
     console.log("source", `notification@${process.env.ENV_TYPE}.jasonpauldj.me`);
 
@@ -122,6 +131,7 @@ exports.emailService = async (event) => {
 //   TopicArn: 'arn:aws:sns:us-east-1:502560949037:TestTopic',
 //   Subject: null,
 //   Message: '{"username":"jane9.doe@example.com","token":"123456789"}',
+//   Message: "{'username':'jasonpauldj@gmail.com','token':'123456789'}",
 //   Timestamp: '2022-04-12T01:04:50.815Z',
 //   SignatureVersion: '1',
 //   Signature: 'GeVo2Qolz2k+yJtDL3fy8DDt5rLUQig9eyYYPmTBG5dpvCAfdwQbnSntMW3v+avCYhU2OivtP2L51F4NKRCGyKR7trzHcifUTI4nwgwKlNHX6zn8Bh+K3IsjyAQP1VZqUKc0XT8ftH0TxQu7NBx64XxQV7Y1me1SWqBRgnZhmpeK5hJWFh01wI756FR72ukFKWH5++dxMGiUybxiQhc9eOe2/FpArR+MSzXvYMWk0O/mnOZOVLgi2jPvAdmjyVS1CU4WnH5sah8SwjOwodJxTjXU071SgGttE8yNuqaDtQZUVfXA9kEWXyBU0G09yJt/wmAjp+XUU2AbgajFVjXMxw==',
