@@ -1,0 +1,22 @@
+{
+  "name": "serverless",
+  "version": "1.0.0",
+  "description": "This repository will have the code related to the lambda function",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/jasonpaulneu/serverless.git"
+  },
+  "author": "Jason Paul Darivemula",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/jasonpaulneu/serverless/issues"
+  },
+  "homepage": "https://github.com/jasonpaulneu/serverless#readme",
+  "dependencies": {
+    "@aws-sdk/client-ses": "^3.67.0"
+  }
+}
