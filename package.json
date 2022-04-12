@@ -17,6 +17,8 @@
   },
   "homepage": "https://github.com/jasonpaulneu/serverless#readme",
   "dependencies": {
-    "@aws-sdk/client-ses": "^3.67.0"
+    "@aws-sdk/client-ses": "^3.67.0",
+    "aws-sdk": "^2.1112.0",
+    "dotenv": "^16.0.0"
   }
 }
