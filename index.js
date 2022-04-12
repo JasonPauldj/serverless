@@ -1,5 +1,8 @@
 const AWS = require('aws-sdk')
-var ses = new AWS.SES();
+
+require('dotenv').config();
+
+let ses = new AWS.SES();
 
 exports.emailService = async (event) => {
  
@@ -17,24 +20,24 @@ exports.emailService = async (event) => {
 
     const inputParams = {
         SourceArn: "arn:aws:ses:us-east-1:502560949037:identity/dev.jasonpauldj.me",
-        Source:"test@dev.jasonpauldj.me",
+        Source:`notification@${process.ENV_TYPE}.jasonpauldj.me`,
         Destination: {
-            ToAddresses: ["success@simulator.amazonses.com"]
+            ToAddresses: [to]
         },
         Message: {
             Body: {
                 Html: {
                     Charset: "UTF-8",
-                    Data: "This message body contains HTML formatting. It can, for example, contain links like this one: <a class=\"ulink\" href=\"http://docs.aws.amazon.com/ses/latest/DeveloperGuide\" target=\"_blank\">Amazon SES Developer Guide</a>."
-                },
-                Text: {
-                    Charset: "UTF-8",
-                    Data: "This is the message body in text format."
+                    Data: `<div><p>Hello ${to},</p>
+                    <p>Thank you for signing up to our services. We are happy to welcome you in the family.</p>
+                    <p>You are almost ready to enjoy the full experience. Simply click the below link to verify your e-mail address.</p>
+                    <p><a  href=\"http://${process.env.ENV_TYPE}.jasonpauldj.me/v1/verifyUserEmail?email=${to}&token=${token}\" target=\"_blank\"></p>
+                    </div>`
                 }
             },
             Subject: {
                 Charset: "UTF-8",
-                Data: "Test email"
+                Data: "Service Verification Mail"
             }
         }
     }
