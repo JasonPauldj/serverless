@@ -1,9 +1,12 @@
 const AWS = require('aws-sdk')
 
 let ses = new AWS.SES();
+let dynamo = new AWS.DynamoDB({
+    apiVersion: '2012-08-10'
+});
 
 exports.emailService = async (event) => {
- 
+
     // console.log(event);
     const sns = event.Records[0].Sns;
     // console.log(sns);
@@ -13,14 +16,50 @@ exports.emailService = async (event) => {
     const to = message.username;
     const token = message.token;
 
-     console.log("to",to);
-     console.log("token",token);
-     console.log("sourceArn", `arn:aws:ses:${process.env.REGION}:${process.env.ACCOUNT_ID}:identity/${process.env.ENV_TYPE}.jasonpauldj.me`);
-     console.log("source", `notification@${process.env.ENV_TYPE}.jasonpauldj.me`);
+    const dynamoDBInputParams = {
+        KeyConditionExpression: "userId = :v1",
+        ExpressionAttributeValues: {
+            ":v1": {
+                S: to
+            }
+        },
+        TableName: process.env.DYNAMODB_TABLE_NAME
+    }
+    // checking if mail has already been sent
+    dynamo.query(dynamoDBInputParams, function (err, data) {
+        if (err) console.log(err, err.stack);
+        else {
+
+            return;
+        }
+    })
+
+    //if mail hasn't been sent
+    //put item in dynamodb
+    const dynamoDBPutInputParams = {
+        Item: {
+            userId: {
+                S: to
+            }
+        },
+        TableName: process.env.DYNAMODB_TABLE_NAME
+    }
+    try {
+        let data = await dynamo.putItem(dynamoDBPutInputParams).promise();
+    } catch (err) {
+        console.log(err);
+    }
+
+    //sending email to the user
+    console.log("to", to);
+    console.log("token", token);
+    console.log("sourceArn", `arn:aws:ses:${process.env.REGION}:${process.env.ACCOUNT_ID}:identity/${process.env.ENV_TYPE}.jasonpauldj.me`);
+    console.log("source", `notification@${process.env.ENV_TYPE}.jasonpauldj.me`);
+
 
     const inputParams = {
         SourceArn: `arn:aws:ses:${process.env.REGION}:${process.env.ACCOUNT_ID}:identity/${process.env.ENV_TYPE}.jasonpauldj.me`,
-        Source:`notification@${process.env.ENV_TYPE}.jasonpauldj.me`,
+        Source: `notification@${process.env.ENV_TYPE}.jasonpauldj.me`,
         Destination: {
             ToAddresses: [to]
         },
