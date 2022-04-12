@@ -3,17 +3,17 @@ var ses = new AWS.SES();
 
 exports.handler = async (event) => {
  
-    console.log(event);
+    // console.log(event);
     const sns = event.Records[0].Sns;
-    console.log(sns);
+    // console.log(sns);
 
     const message = JSON.parse(sns.Message);
 
     const to = message.username;
     const token = message.token;
 
-    console.log(to);
-    console.log(token);
+    // console.log(to);
+    // console.log(token);
 
     const inputParams = {
         SourceArn: "arn:aws:ses:us-east-1:502560949037:identity/dev.jasonpauldj.me",
