@@ -42,17 +42,24 @@ exports.emailService = async (event) => {
         }
     }
 
-    ses.sendEmail(inputParams, function(err, data) {
-        if (err) console.log(err, err.stack); // an error occurred
-        else console.log(data); // successful response
-    });
+    let promise=ses.sendEmail(inputParams).promise();
+    promise.then((data)=>{
+        console.log(data);
+    }).catch(err=>{
+        console.log(err);
+    })
+
+    // ses.sendEmail(inputParams, function(err, data) {
+    //     if (err) console.log(err, err.stack); // an error occurred
+    //     else console.log(data); // successful response
+    // });
 
 
-    const response = {
-        statusCode: 200,
-        body: JSON.stringify('Hello from Lambda!'),
-    };
-    return response;
+    // const response = {
+    //     statusCode: 200,
+    //     body: JSON.stringify('Hello from Lambda!'),
+    // };
+    // return response;
 };
 
 
