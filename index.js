@@ -75,7 +75,7 @@ exports.emailService = async (event) => {
                     Data: `<div><p>Hello ${to},</p>
                     <p>Thank you for signing up to our services. We are happy to welcome you in the family.</p>
                     <p>You are almost ready to enjoy the full experience. Simply click the below link to verify your e-mail address.</p>
-                    <p><a  href=\"http://${process.env.ENV_TYPE}.jasonpauldj.me/v1/verifyUserEmail?email=${to}&token=${token}\" target=\"_blank\">Click here to verify email</a></p>
+                    <p><a  href=\"https://${process.env.ENV_TYPE}.jasonpauldj.me/v1/verifyUserEmail?email=${to}&token=${token}\" target=\"_blank\">Click here to verify email</a></p>
                     </div>`
                 }
             },
